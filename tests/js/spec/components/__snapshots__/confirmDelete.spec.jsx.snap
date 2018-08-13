@@ -233,6 +233,7 @@ exports[`ConfirmDelete renders 1`] = `
           className="modal-footer"
         >
           <Button
+            alignLabel="flex-start"
             disabled={false}
             onClick={[Function]}
             style={
@@ -276,20 +277,25 @@ exports[`ConfirmDelete renders 1`] = `
                     }
                   }
                 >
-                  <ButtonLabel>
+                  <ButtonLabel
+                    justify="flex-start"
+                  >
                     <Component
                       className="css-1emshjx-ButtonLabel e17811v31"
+                      justify="flex-start"
                     >
                       <Flex
                         align="center"
                         className="css-1emshjx-ButtonLabel e17811v31"
+                        justify="flex-start"
                       >
                         <Base
                           align="center"
-                          className="e17811v31 css-1nhrbny-ButtonLabel"
+                          className="e17811v31 css-11rqwwm-ButtonLabel"
+                          justify="flex-start"
                         >
                           <div
-                            className="e17811v31 css-1nhrbny-ButtonLabel"
+                            className="e17811v31 css-11rqwwm-ButtonLabel"
                             is={null}
                           >
                             Cancel
@@ -303,6 +309,7 @@ exports[`ConfirmDelete renders 1`] = `
             </StyledButton>
           </Button>
           <Button
+            alignLabel="flex-start"
             autoFocus={true}
             data-test-id="confirm-modal"
             disabled={true}
@@ -345,22 +352,26 @@ exports[`ConfirmDelete renders 1`] = `
                   to={null}
                 >
                   <ButtonLabel
+                    justify="flex-start"
                     priority="primary"
                   >
                     <Component
                       className="css-1emshjx-ButtonLabel e17811v31"
+                      justify="flex-start"
                       priority="primary"
                     >
                       <Flex
                         align="center"
                         className="css-1emshjx-ButtonLabel e17811v31"
+                        justify="flex-start"
                       >
                         <Base
                           align="center"
-                          className="e17811v31 css-1nhrbny-ButtonLabel"
+                          className="e17811v31 css-11rqwwm-ButtonLabel"
+                          justify="flex-start"
                         >
                           <div
-                            className="e17811v31 css-1nhrbny-ButtonLabel"
+                            className="e17811v31 css-11rqwwm-ButtonLabel"
                             is={null}
                           >
                             Confirm
