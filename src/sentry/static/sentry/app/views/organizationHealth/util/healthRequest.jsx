@@ -14,6 +14,7 @@ class HealthRequestWithParams extends React.Component {
     /**
      * API client instance
      */
+<<<<<<< HEAD
     api: PropTypes.object.isRequired,
 
     organization: SentryTypes.Organization.isRequired,
@@ -23,10 +24,16 @@ class HealthRequestWithParams extends React.Component {
      */
     tag: PropTypes.string.isRequired,
 
+=======
+    api: PropTypes.object,
+
+    organization: SentryTypes.Organization.isRequired,
+
+>>>>>>> dbc5104210... fix tests
     /**
-     * Callback function to process category
+     * Health tag (this will use a BASE_URL defined in health actionCreators
      */
-    getCategory: PropTypes.func,
+    tag: PropTypes.string.isRequired,
 
     /**
      * List of project ids to query
