@@ -8,9 +8,7 @@ import {Panel, PanelHeader, PanelItem} from 'app/components/panels';
 export const TableChart = styled(
   class TableChartComponent extends React.Component {
     static propTypes = {
-      data: PropTypes.arrayOf(
-        PropTypes.arrayOf(PropTypes.oneOfType([PropTypes.string, PropTypes.number]))
-      ),
+      data: PropTypes.arrayOf(PropTypes.any),
       /**
        * The column index where your data starts.
        * This is used to calculate totals.
@@ -67,6 +65,7 @@ export const TableChart = styled(
         renderRow,
         shadeRowPercentage,
         showRowTotal,
+        onRowClick,
         ...props
       }) =>
         dataMaybeWithTotals.map((row, rowIndex) => {
@@ -87,6 +86,7 @@ export const TableChart = styled(
               value={dataTotals.rowTotals[rowIndex]}
               total={dataTotals.total}
               widths={widths}
+              onClick={onRowClick}
             >
               {renderRow({
                 css: {zIndex: showBar ? '2' : undefined},
@@ -349,15 +349,21 @@ export const TableChartRow = styled(
        * Total value of all rows
        */
       total: PropTypes.number,
+
+      onClick: PropTypes.func,
+    };
+
+    static defaultProps = {
+      onClick: () => {},
     };
 
     render() {
-      let {className, showBar, total, value, children} = this.props;
+      let {className, onClick, showBar, total, value, children} = this.props;
       let barWidth =
         total > 0 && typeof value === 'number' ? Math.round(value / total * 100) : 0;
 
       return (
-        <PanelItem className={className}>
+        <PanelItem className={className} onClick={onClick}>
           {children}
           {showBar && <TableChartRowBar width={barWidth} />}
         </PanelItem>

@@ -22,25 +22,33 @@ class OrganizationHealth extends React.Component {
   constructor(props) {
     super(props);
     let {organization} = props;
-    let projects = organization.projects
-      .filter(({isMember}) => isMember)
-      .map(({id}) => id);
+    let projects =
+      organization.projects &&
+      organization.projects.filter(({isMember}) => isMember).map(({id}) => id);
+
     this.state = {
-      params: {
-        projects,
-        environments: [],
-        period: '7d',
+      actions: {
+        updateParams: this.updateParams,
+        setFilter: this.setFilter,
       },
+      projects,
+      environments: [],
+      period: '7d',
+      filters: [],
     };
   }
 
   updateParams = obj => {
     this.setState(state => ({
       ...state,
-      params: {
-        ...state.params,
-        ...obj,
-      },
+      ...obj,
+    }));
+  };
+
+  setFilter = (tag, value) => {
+    this.setState(state => ({
+      ...state,
+      filters: [`${tag}:${value}`],
     }));
   };
 
@@ -65,27 +73,27 @@ class OrganizationHealth extends React.Component {
 
     return (
       <Feature feature={['health']} renderNoFeatureMessage>
-        <HealthContext.Provider value={this.state.params}>
+        <HealthContext.Provider value={this.state}>
           <HealthWrapper>
             <HealthNavigationMenu />
             <Content>
               <Header>
                 <MultipleProjectSelector
                   projects={projects}
-                  value={this.state.params.projects}
+                  value={this.state.projects}
                   onChange={this.handleChangeProjects}
                 />
                 <HeaderSeparator />
                 <MultipleEnvironmentSelector
                   organization={organization}
-                  value={this.state.params.environments}
+                  value={this.state.environments}
                   onChange={this.handleChangeEnvironments}
                 />
                 <HeaderSeparator />
                 <TimeRangeSelector
                   showAbsolute={false}
                   showRelative
-                  relative={this.state.params.period}
+                  relative={this.state.period}
                   onChange={this.handleChangeTime}
                 />
               </Header>

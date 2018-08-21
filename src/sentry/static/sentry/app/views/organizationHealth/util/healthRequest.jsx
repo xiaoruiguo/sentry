@@ -14,22 +14,10 @@ class HealthRequestWithParams extends React.Component {
     /**
      * API client instance
      */
-<<<<<<< HEAD
     api: PropTypes.object.isRequired,
 
     organization: SentryTypes.Organization.isRequired,
 
-    /**
-     * Health tag (this will use a BASE_URL defined in health actionCreators
-     */
-    tag: PropTypes.string.isRequired,
-
-=======
-    api: PropTypes.object,
-
-    organization: SentryTypes.Organization.isRequired,
-
->>>>>>> dbc5104210... fix tests
     /**
      * Health tag (this will use a BASE_URL defined in health actionCreators
      */
@@ -85,7 +73,8 @@ class HealthRequestWithParams extends React.Component {
     includePrevious: true,
     timeseries: true,
     interval: '1d',
-    getCategory: i => i,
+    getCategory: (tagObject = {}) =>
+      typeof tagObject.value !== 'undefined' ? tagObject.value : tagObject,
   };
 
   constructor(props) {
@@ -107,15 +96,21 @@ class HealthRequestWithParams extends React.Component {
 
   fetchData() {
     let {api, ...props} = this.props;
-    doHealthRequest(api, props).then(({data}) => {
+    doHealthRequest(api, props).then(({data, totals}) => {
       this.setState({
         data,
+        totals,
       });
     });
   }
 
+  // Is going to be called with an object with `value` and `_health_id`
+  getCategory = tagObject => {
+    return this.props.getCategory(tagObject);
+  };
+
   transformTimeseriesData = () => {
-    let {tag, getCategory} = this.props;
+    let {tag} = this.props;
     let {data} = this.state;
 
     const categorySet = new Set();
@@ -124,9 +119,9 @@ class HealthRequestWithParams extends React.Component {
     data.forEach(([timestamp, resultsForTimestamp]) => {
       resultsForTimestamp &&
         !!resultsForTimestamp.length &&
-        resultsForTimestamp.forEach(({count, [tag]: name}) => {
-          categorySet.add(getCategory(name));
-          timestampMap.set(`${timestamp}-${getCategory(name)}`, count);
+        resultsForTimestamp.forEach(({count, [tag]: tagObject}) => {
+          categorySet.add(this.getCategory(tagObject));
+          timestampMap.set(`${timestamp}-${this.getCategory(tagObject)}`, count);
         });
     });
 
@@ -148,17 +143,18 @@ class HealthRequestWithParams extends React.Component {
 
     return timeseries
       ? this.transformTimeseriesData()
-      : data.map(({[tag]: name, count}) => [name, count]);
+      : data.map(({[tag]: tagObject, count}) => [this.getCategory(tagObject), count]);
   };
 
   render() {
     let {children, ...props} = this.props;
-    let {data} = this.state;
+    let {data, totals} = this.state;
 
     return children({
       // Loading if data is null
       loading: data === null,
       data: this.transformData(data),
+      totals,
       originalData: data,
 
       // sometimes we want to reference props that was given to HealthRequest
@@ -173,11 +169,12 @@ const HealthRequest = withLatestContext(
       render() {
         return (
           <HealthContext.Consumer>
-            {({projects, environments, period}) => (
+            {({projects, environments, period, filters}) => (
               <HealthRequestWithParams
                 projects={projects}
                 environments={environments}
                 period={period}
+                filters={filters}
                 {...this.props}
               />
             )}

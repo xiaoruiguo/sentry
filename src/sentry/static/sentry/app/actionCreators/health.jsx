@@ -27,6 +27,7 @@ export const doHealthRequest = (
     timeseries,
     includePrevious,
     topk,
+    filters,
   }
 ) => {
   if (!api) return Promise.reject(new Error('API client not available'));
@@ -39,8 +40,10 @@ export const doHealthRequest = (
     statsPeriod: period,
     project: projects,
     environment: environments,
+    q: filters,
     ...(topk ? {topk} : {}),
   };
+  console.log(query);
 
   return api.requestPromise(`${BASE_URL(organization)}${path}`, {
     query,

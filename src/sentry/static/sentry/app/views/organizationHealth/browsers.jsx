@@ -13,14 +13,14 @@ import HealthContext from './util/healthContext';
 import HealthRequest from './util/healthRequest';
 import EventsTableChart from './eventsTableChart';
 
-const OrganizationHealthErrors = styled(
-  class extends React.Component {
+const OrganizationHealthBrowsers = styled(
+  class OrganizationHealtherBrowsersComponent extends React.Component {
     render() {
       let {className} = this.props;
       return (
         <div className={className}>
           <Flex justify="space-between">
-            <Header>Browsers & Operating Systems</Header>
+            <Header>{t('Browsers')}</Header>
           </Flex>
 
           <Flex>
@@ -66,10 +66,10 @@ const OrganizationHealthErrors = styled(
 
           <Flex>
             <HealthRequest tag="browser.name" timeseries={false} topk={5}>
-              {({data, originalData, tag, loading}) => {
+              {({data, totals, originalData, tag, loading}) => {
                 if (!data) return null;
 
-                const total = data.reduce((acc, [, value]) => acc + value, 0);
+                const total = totals.count;
                 const seriesPercentages = data
                   .map(([name, value]) => [name, Math.round(value / total * 10000) / 100])
                   .reduce(
@@ -81,17 +81,18 @@ const OrganizationHealthErrors = styled(
                   );
                 return (
                   <EventsTableChart
+                    total={total}
                     headers={[
                       t('Browser'),
                       t('Events'),
                       t('Percentage'),
                       t('Last event'),
                     ]}
-                    data={originalData.map(({count, lastCount, [tag]: name}) => ({
+                    data={originalData.map(({count, lastCount, [tag]: tagObject}) => ({
                       count,
                       lastCount,
-                      name,
-                      percentage: seriesPercentages[name],
+                      name: tagObject.value,
+                      percentage: seriesPercentages[tagObject.value],
                     }))}
                   />
                 );
@@ -106,7 +107,7 @@ const OrganizationHealthErrors = styled(
   }
 )``;
 
-class OrganizationHealthErrorsContainer extends React.Component {
+class OrganizationHealthBrowsersContainer extends React.Component {
   render() {
     // Destructure props from `withLatestContext`
     let {
@@ -119,7 +120,7 @@ class OrganizationHealthErrorsContainer extends React.Component {
     return (
       <HealthContext.Consumer>
         {({projects, environments, period}) => (
-          <OrganizationHealthErrors
+          <OrganizationHealthBrowsers
             projects={projects}
             environments={environments}
             period={period}
@@ -131,7 +132,7 @@ class OrganizationHealthErrorsContainer extends React.Component {
   }
 }
 
-export default withApi(withLatestContext(OrganizationHealthErrorsContainer));
+export default withApi(withLatestContext(OrganizationHealthBrowsersContainer));
 
 const Header = styled(Flex)`
   font-size: 18px;

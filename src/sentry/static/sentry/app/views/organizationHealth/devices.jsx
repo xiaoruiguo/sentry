@@ -13,14 +13,14 @@ import HealthContext from './util/healthContext';
 import HealthRequest from './util/healthRequest';
 import EventsTableChart from './eventsTableChart';
 
-const OrganizationHealthErrors = styled(
-  class extends React.Component {
+const OrganizationHealthDevices = styled(
+  class OrganizationHealthDevicesComponent extends React.Component {
     render() {
       let {className} = this.props;
       return (
         <div className={className}>
           <Flex justify="space-between">
-            <Header>Devices</Header>
+            <Header>{t('Devices')}</Header>
           </Flex>
 
           <HealthRequest tag="device" timeseries={false} topk={5}>
@@ -62,11 +62,11 @@ const OrganizationHealthErrors = styled(
                         t('Percentage'),
                         t('Last event'),
                       ]}
-                      data={originalData.map(({count, lastCount, [tag]: name}) => ({
+                      data={originalData.map(({count, lastCount, [tag]: tagObject}) => ({
                         count,
                         lastCount,
-                        name,
-                        percentage: seriesPercentages[name],
+                        name: tagObject.value,
+                        percentage: seriesPercentages[tagObject.value],
                       }))}
                     />
                   </Flex>
@@ -80,7 +80,7 @@ const OrganizationHealthErrors = styled(
   }
 )``;
 
-class OrganizationHealthErrorsContainer extends React.Component {
+class OrganizationHealthDevicesContainer extends React.Component {
   render() {
     // Destructure props from `withLatestContext`
     let {
@@ -93,7 +93,7 @@ class OrganizationHealthErrorsContainer extends React.Component {
     return (
       <HealthContext.Consumer>
         {({projects, environments, period}) => (
-          <OrganizationHealthErrors
+          <OrganizationHealthDevices
             projects={projects}
             environments={environments}
             period={period}
@@ -105,7 +105,7 @@ class OrganizationHealthErrorsContainer extends React.Component {
   }
 }
 
-export default withApi(withLatestContext(OrganizationHealthErrorsContainer));
+export default withApi(withLatestContext(OrganizationHealthDevicesContainer));
 
 const Header = styled(Flex)`
   font-size: 18px;

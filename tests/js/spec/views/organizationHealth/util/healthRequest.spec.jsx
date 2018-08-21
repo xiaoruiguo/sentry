@@ -4,13 +4,17 @@ import React from 'react';
 import {doHealthRequest} from 'app/actionCreators/health';
 import {HealthRequestWithParams} from 'app/views/organizationHealth/util/healthRequest';
 
+const COUNT_OBJ = {
+  count: 123,
+  release: {
+    _health_id: 'release:release-slug',
+    value: {slug: 'release-slug'},
+  },
+};
+
 jest.mock('app/actionCreators/health', () => {
   return {
-    doHealthRequest: jest.fn(() =>
-      Promise.resolve({
-        data: [[new Date(), [{count: 123, release: {slug: 'release-slug'}}]]],
-      })
-    ),
+    doHealthRequest: jest.fn(),
   };
 });
 
@@ -24,7 +28,7 @@ describe('HealthRequest', function() {
     beforeAll(function() {
       doHealthRequest.mockImplementation(() =>
         Promise.resolve({
-          data: [[new Date(), [{count: 123, release: 'release-name'}]]],
+          data: [[new Date(), [COUNT_OBJ]]],
         })
       );
       wrapper = mount(
@@ -55,10 +59,10 @@ describe('HealthRequest', function() {
           loading: false,
           data: [
             {
-              seriesName: 'release-name',
+              seriesName: expect.anything(),
               data: [
                 expect.objectContaining({
-                  name: expect.anything(),
+                  name: expect.any(Number),
                   value: 123,
                 }),
               ],
@@ -123,7 +127,7 @@ describe('HealthRequest', function() {
   it('defines a category name getter', async function() {
     doHealthRequest.mockImplementation(() =>
       Promise.resolve({
-        data: [[new Date(), [{count: 123, release: {slug: 'release-slug'}}]]],
+        data: [[new Date(), [COUNT_OBJ]]],
       })
     );
     wrapper = mount(
@@ -163,7 +167,7 @@ describe('HealthRequest', function() {
   it('transforms data for non-timeseries response', async function() {
     doHealthRequest.mockImplementation(() =>
       Promise.resolve({
-        data: [{count: 123, release: 'release-name'}],
+        data: [COUNT_OBJ],
       })
     );
     wrapper = mount(
@@ -175,6 +179,7 @@ describe('HealthRequest', function() {
         organization={organization}
         tag="release"
         timeseries={false}
+        getCategory={({slug} = {}) => slug}
       >
         {mock}
       </HealthRequestWithParams>
@@ -184,8 +189,13 @@ describe('HealthRequest', function() {
     expect(mock).toHaveBeenLastCalledWith(
       expect.objectContaining({
         loading: false,
-        data: [['release-name', 123]],
-        originalData: [{count: 123, release: 'release-name'}],
+        data: [['release-slug', 123]],
+        originalData: [
+          {
+            count: 123,
+            release: {value: {slug: 'release-slug'}, _health_id: 'release:release-slug'},
+          },
+        ],
       })
     );
   });
