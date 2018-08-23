@@ -147,6 +147,7 @@ exports[`ExternalIssueActions with no external issues linked renders 1`] = `
   }
 >
   <IssueSyncElement
+    externalIssueDisplayName={null}
     externalIssueId={null}
     externalIssueKey={null}
     externalIssueLink={null}
