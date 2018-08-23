@@ -767,7 +767,7 @@ exports[`OrganizationIntegrations render() with installed integrations Displays 
                                 is={null}
                               >
                                 <Button
-                                  alignLabel="flex-start"
+                                  alignLabel="left"
                                   disabled={false}
                                   icon="icon-circle-add"
                                   onClick={[Function]}
@@ -1510,7 +1510,7 @@ exports[`OrganizationIntegrations render() with installed integrations Displays 
                                 is={null}
                               >
                                 <Button
-                                  alignLabel="flex-start"
+                                  alignLabel="left"
                                   disabled={false}
                                   icon="icon-circle-add"
                                   onClick={[Function]}
@@ -2015,7 +2015,7 @@ exports[`OrganizationIntegrations render() with installed integrations Displays 
                                           onClick={[Function]}
                                         >
                                           <Button
-                                            alignLabel="flex-start"
+                                            alignLabel="left"
                                             borderless={true}
                                             className="css-1j0nrmm-StyledButton ejqw4f70"
                                             disabled={false}
@@ -2955,7 +2955,7 @@ exports[`OrganizationIntegrations render() without integrations Displays integra
                                 is={null}
                               >
                                 <Button
-                                  alignLabel="flex-start"
+                                  alignLabel="left"
                                   disabled={false}
                                   icon="icon-circle-add"
                                   onClick={[Function]}
@@ -3664,7 +3664,7 @@ exports[`OrganizationIntegrations render() without integrations Displays integra
                                 is={null}
                               >
                                 <Button
-                                  alignLabel="flex-start"
+                                  alignLabel="left"
                                   disabled={false}
                                   icon="icon-circle-add"
                                   onClick={[Function]}
