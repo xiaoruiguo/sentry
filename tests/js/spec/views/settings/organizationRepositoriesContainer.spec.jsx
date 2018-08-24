@@ -19,6 +19,10 @@ describe('OrganizationRepositoriesContainer', function() {
     describe('without any providers', function() {
       beforeEach(function() {
         Client.addMockResponse({
+          url: '/organizations/org-slug/',
+          body: TestStubs.Organization({slug: 'org-slug'}),
+        });
+        Client.addMockResponse({
           url: '/organizations/org-slug/repos/',
           body: [],
         });

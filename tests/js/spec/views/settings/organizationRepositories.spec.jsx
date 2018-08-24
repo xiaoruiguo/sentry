@@ -11,6 +11,7 @@ describe('OrganizationRepositories', function() {
         params={{orgId: 'org-slug'}}
         itemList={[]}
         repoConfig={{}}
+        organization={TestStubs.Organization()}
       />
     );
     expect(wrapper).toMatchSnapshot();
@@ -22,6 +23,7 @@ describe('OrganizationRepositories', function() {
         params={{orgId: 'org-slug'}}
         repoConfig={{providers: [TestStubs.GitHubRepositoryProvider({id: 'github'})]}}
         itemList={[]}
+        organization={TestStubs.Organization()}
       />
     );
     expect(wrapper).toMatchSnapshot();
@@ -37,6 +39,7 @@ describe('OrganizationRepositories', function() {
         params={{orgId: 'org-slug'}}
         repoConfig={{providers: [TestStubs.GitHubRepositoryProvider({id: 'github'})]}}
         itemList={[TestStubs.Repository()]}
+        organization={TestStubs.Organization()}
       />
     );
     expect(wrapper).toMatchSnapshot();

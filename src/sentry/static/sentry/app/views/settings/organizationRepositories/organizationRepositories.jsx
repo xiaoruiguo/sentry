@@ -4,6 +4,7 @@ import React from 'react';
 import styled from 'react-emotion';
 
 import {t, tct} from 'app/locale';
+import AlertLink from 'app/components/alertLink';
 import Button from 'app/components/buttons/button';
 import Confirm from 'app/components/confirm';
 import DropdownLink from 'app/components/dropdownLink';
@@ -27,6 +28,7 @@ export default class OrganizationRepositories extends React.Component {
   static propTypes = {
     itemList: PropTypes.array,
     repoConfig: PropTypes.object,
+    organization: PropTypes.object,
     onAddRepo: PropTypes.func,
     onCancelDelete: PropTypes.func,
     onDeleteRepo: PropTypes.func,
@@ -55,37 +57,46 @@ export default class OrganizationRepositories extends React.Component {
       onAddRepo,
       onCancelDelete,
       onDeleteRepo,
+      organization,
     } = this.props;
     let {orgId} = params;
     let hasItemList = itemList && itemList.length > 0;
+    let features = new Set(organization.features);
 
     return (
       <div>
-        <SettingsPageHeader
-          title={t('Repositories')}
-          action={
-            <DropdownLink
-              anchorRight
-              className="btn btn-primary btn-sm"
-              title={t('Add Repository')}
-            >
-              {repoConfig &&
-                repoConfig.providers &&
-                repoConfig.providers.map(provider => {
-                  return (
-                    <MenuItem noAnchor={true} key={provider.id}>
-                      <AddRepositoryLink
-                        provider={provider}
-                        orgId={orgId}
-                        onSuccess={onAddRepo}
-                      />
-                    </MenuItem>
-                  );
-                })}
-            </DropdownLink>
-          }
-        />
-
+        {features.has('bitbucket-integration') || features.has('github-enterprise') ? (
+          <AlertLink to={`/settings/${orgId}/integrations/`}>
+            {t(
+              'Want to add a repository to start tracking commits? Install or configure your version control integration here.'
+            )}
+          </AlertLink>
+        ) : (
+          <SettingsPageHeader
+            title={t('Repositories')}
+            action={
+              <DropdownLink
+                anchorRight
+                className="btn btn-primary btn-sm"
+                title={t('Add Repository')}
+              >
+                {repoConfig &&
+                  repoConfig.providers &&
+                  repoConfig.providers.map(provider => {
+                    return (
+                      <MenuItem noAnchor={true} key={provider.id}>
+                        <AddRepositoryLink
+                          provider={provider}
+                          orgId={orgId}
+                          onSuccess={onAddRepo}
+                        />
+                      </MenuItem>
+                    );
+                  })}
+              </DropdownLink>
+            }
+          />
+        )}
         {!hasItemList && (
           <div className="m-b-2">
             <TextBlock>

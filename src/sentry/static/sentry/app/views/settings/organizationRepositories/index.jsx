@@ -13,6 +13,7 @@ export default class OrganizationRepositoriesContainer extends AsyncView {
     return [
       ['itemList', `/organizations/${orgId}/repos/`, {query: {status: ''}}],
       ['repoConfig', `/organizations/${orgId}/config/repos/`],
+      ['organization', `/organizations/${orgId}/`],
     ];
   }
 
